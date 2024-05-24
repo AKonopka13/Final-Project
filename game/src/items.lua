@@ -1,8 +1,6 @@
 Items = Object:extend()
 
-local timer = 0
-
---make table of images for Items to pull from randomly???
+--make table of images for Items to pull from randomly
 local items_list = {
     love.graphics.newImage("assets/items/dinghy.png"), love.graphics.newImage("assets/items/wood.png"), 
     love.graphics.newImage("assets/items/barrel1.png"), love.graphics.newImage("assets/items/barrel2.png"),
@@ -13,13 +11,12 @@ function Items:new()
     self.image = items_list[love.math.random(1, #items_list)]
     self.x = love.graphics.getWidth()
     self.y = love.math.random(0, love.graphics.getHeight())
-    self.speed = 50
+    self.speed = 100
     self.width = self.image:getWidth()
     self.height = self.image:getHeight()
 end
 
 function Items:update(dt)
-    timer = timer + dt
     self.x = self.x - self.speed * dt
 
     -- when item exits screen reset
@@ -47,13 +44,11 @@ function Items:checkCollision(obj)
     and self_left < obj_right
     and self_bottom > obj_top
     and self_top < obj_bottom then
+        Playerdmg = Playerdmg + 1
         self.dead = true 
     end
 end
 
 function Items:spawnItem()
-    if timer > 5 then
-        table.insert(listOfItems, Items(self.x, self.y))
-        timer = 0
-    end
+    table.insert(listOfItems, Items(self.x, self.y))
 end

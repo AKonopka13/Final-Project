@@ -1,7 +1,7 @@
 Enemy = Object:extend()
 
 function Enemy:new()
-    self.image = love.graphics.newImage("assets/enemy_ship1.png")
+    self.image = love.graphics.newImage("assets/enemy/enemy_ship1.png")
     self.x = 325
     self.y = 500
     self.speed = 100
@@ -24,7 +24,15 @@ function Enemy:update(dt)
 end
 
 function Enemy:draw()
-    love.graphics.draw(self.image, self.x, self.y, 300)
+    if Enemydmg < 2 then
+        love.graphics.draw(self.image, self.x, self.y)
+    elseif Enemydmg >= 2 and Enemydmg < 5 then
+        love.graphics.draw(love.graphics.newImage("assets/enemy/enemy_ship2.png"), self.x, self.y)
+    elseif Enemydmg >= 5 and Enemydmg < 10 then
+        love.graphics.draw(love.graphics.newImage("assets/enemy/enemy_ship3.png"), self.x, self.y)
+    elseif Enemydmg == 10 then
+        love.graphics.draw(love.graphics.newImage("assets/enemy/enemy_ship4.png"), self.x, self.y)
+    end
 
     local window_width = love.graphics.getWidth()
 
@@ -35,3 +43,6 @@ function Enemy:draw()
     end
 end
 
+function Enemy:fire()
+    table.insert(listOfBullets, Bullet(self.x + (self.width / 2), self.y - self.height))
+end
