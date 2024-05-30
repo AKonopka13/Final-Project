@@ -1,5 +1,8 @@
 Items = Object:extend()
 
+local itemSFX = love.audio.newSource("assets/audio/wood_smash.mp3", "static")
+itemSFX:setVolume(0.5)
+
 --make table of images for Items to pull from randomly
 local items_list = {
     love.graphics.newImage("assets/items/dinghy.png"), love.graphics.newImage("assets/items/wood.png"), 
@@ -44,8 +47,9 @@ function Items:checkCollision(obj)
     and self_left < obj_right
     and self_bottom > obj_top
     and self_top < obj_bottom then
+        itemSFX:play()
         Playerdmg = Playerdmg + 1
-        self.dead = true 
+        self.dead = true
     end
 end
 

@@ -49,7 +49,10 @@ function Player:draw()
 end
 
 function Player:keyPressed(key)
+    local cannonSFX = love.audio.newSource("assets/audio/cannonball.mp3", "static")
+    cannonSFX:setVolume(0.4)
 	if key == "space" then
+        cannonSFX:play()
 		table.insert(listOfBullets, Bullet(self.x + (self.width / 2), self.y + self.height))
 	end
 end

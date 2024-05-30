@@ -44,5 +44,8 @@ function Enemy:draw()
 end
 
 function Enemy:fire()
+    local cannonSFX = love.audio.newSource("assets/audio/cannonball.mp3", "static")
+    cannonSFX:setVolume(0.4)
+    cannonSFX:play()
     table.insert(listOfBullets, Bullet(self.x + (self.width / 2), self.y - self.height))
 end

@@ -1,5 +1,8 @@
 Bullet = Object:extend()
 
+local explosionSFX = love.audio.newSource("assets/audio/cannon_exp.mp3", "static")
+explosionSFX:setVolume(0.2)
+
 
 function Bullet:new(x, y)
     self.image = love.graphics.newImage("assets/cannon_ball.png")
@@ -54,6 +57,7 @@ function Bullet:checkCollision(obj, obj2)
     and self_left < obj_right
     and self_bottom > obj_top
     and self_top < obj_bottom then
+        explosionSFX:play()
         Enemydmg = Enemydmg + 1
         self.dead = true
     end
@@ -62,6 +66,7 @@ function Bullet:checkCollision(obj, obj2)
     and self_left < obj_right2
     and self_bottom > obj_top2
     and self_top < obj_bottom2 then
+        explosionSFX:play()
         Playerdmg = Playerdmg + 1
         self.dead = true
     end

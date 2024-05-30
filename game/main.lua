@@ -12,24 +12,34 @@ listOfItems = {}
 Playerdmg = 0
 Enemydmg = 0
 --Locals
-local background
-local menu_background
-local background_scroll
-local background_x
+local song = love.audio.newSource("assets/audio/background_music.mp3", "stream")
+	song:setLooping(true)
+	song:setVolume(0.5)
+local backgroundSFX = love.audio.newSource("assets/audio/sea_waves.mp3", "stream")
+	backgroundSFX:setLooping(true)
+	backgroundSFX:setVolume(0.1)
+local font = love.graphics.newFont("assets/TradeWinds-Regular.ttf", 25)
+local background = love.graphics.newImage("assets/background.jpg")
+local menu_background = love.graphics.newImage("assets/menu_background.jpg")
+local background_scroll = 100
+local background_x = 0
+local timer = 0
+local player_timer = 0
+local enemy_timer = 0
+local MAXSCORE = 10
+--Classes
 local player
 local game
 local enemy
 local items
-local timer = 0
-local player_timer = 0
-local enemy_timer = 0
-local MAXSCORE = 1
 --Functions
 local restart
 local menu
 local gameOver
 
 function love.load()
+	song:play()
+	backgroundSFX:play()
 	--Requires Here
 	Object = require "lib.classic"
 	require "src.player"
@@ -37,14 +47,7 @@ function love.load()
 	require "src.bullet"
 	require "src.items"
 	require "src.gamestate"
-
-	--Background 
-	background = love.graphics.newImage("assets/background.jpg")
-	background_scroll = 100
-	background_x = 0
-
-	menu_background = love.graphics.newImage("assets/menu_background.jpg")
-
+	
 	--Classes
 	game = Game()
 	player = Player()
@@ -107,13 +110,14 @@ function love.update(dt)
 end
 
 function love.draw()
+	love.graphics.setFont(font)
 	local fireimg = love.graphics.newImage("assets/fire.png")
 	local fireimg2 = love.graphics.newImage("assets/fire2.png")
 	if game.state.running then
 		love.graphics.draw(background, background_x, 0)
 		love.graphics.draw(background, background_x + love.graphics.getWidth(), 0)
 		love.graphics.draw(fireimg2, 40, 40)
-		-- I want to do somthing better than this, maybe cannoball with countdown timer inside???
+
 		if player_timer == 5 then
 			love.graphics.draw(fireimg, 40, 40)
 			love.graphics.setColor(0, 0, 0)
@@ -142,8 +146,8 @@ function love.draw()
 		menu()
 	end
 
-	--This need to be changed, gameover state with a true false???
 	if gameOver() then
+		backgroundSFX:pause()
 		gameOver()
 	end
 end
@@ -157,11 +161,13 @@ function love.keypressed(key)
 			end
 		end	
 		if key == "escape" then
+			backgroundSFX:pause()
 			game:changeGameState("menu")
 		end
 	elseif game.state.menu then
 		if key == "space" then
 			game:changeGameState("running")
+			backgroundSFX:play()
 		end
 	end
 	if game.state.gameover then
@@ -174,8 +180,7 @@ function love.keypressed(key)
 end
 
 function menu()
-	local font = love.graphics.newFont("assets/TradeWinds-Regular.ttf", 25)
-	love.graphics.setFont(font)
+	song:setVolume(0.2)
 
 	love.graphics.draw(menu_background, 0, 0)
 	love.graphics.setColor(0, 0, 0)
@@ -188,14 +193,12 @@ end
 function gameOver()
 	local player_score = Enemydmg
 	local enemy_score = Playerdmg
-	local player_ship = love.graphics.newImage("assets/player/player_ship1.png")
-	local enemy_ship = love.graphics.newImage("assets/enemy/enemy_ship1.png")
-	local shipX = player_ship:getWidth()
-
-	local font = love.graphics.newFont("assets/TradeWinds-Regular.ttf", 25)
-
-	love.graphics.setFont(font)
+	
 	if player_score == MAXSCORE or enemy_score == MAXSCORE then
+		local player_ship = love.graphics.newImage("assets/player/player_ship1.png")
+		local enemy_ship = love.graphics.newImage("assets/enemy/enemy_ship1.png")
+		local shipX = player_ship:getWidth()
+
 		love.graphics.draw(menu_background, 0, 0)
 		love.graphics.draw(player_ship, love.graphics.getWidth()/2 - 100 - (shipX / 2), love.graphics.getHeight()/4 + 100)
 		love.graphics.draw(enemy_ship, love.graphics.getWidth()/2 + 100 - (shipX / 2), love.graphics.getHeight()/4 + 100)
@@ -213,9 +216,11 @@ function gameOver()
 			love.graphics.print("Press Space to restart", love.graphics.getWidth()/3, love.graphics.getHeight()/4 + 250)
 			love.graphics.print("Press Escape to quit", love.graphics.getWidth()/3, love.graphics.getHeight()/4 + 300)	
 		end
-	love.graphics.setColor(1, 1, 1)
-	game:changeGameState("gameover")
-	return true
+		love.graphics.setColor(1, 1, 1)
+		game:changeGameState("gameover")
+		return true
+		else
+		return false
 	end
 end
 
