@@ -24,8 +24,8 @@ function Player:update(dt)
 
     if self.y < 0 then
         self.y = 0
-    elseif self.y >= 400 then
-        self.y = 400
+    elseif self.y >= 320 then
+        self.y = 320
     end
 
     if self.x <=0 then 

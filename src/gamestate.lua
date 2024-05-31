@@ -1,8 +1,8 @@
 function Game()
     return {
         state = {
-            menu = false,
-            running = true,
+            menu = true,
+            running = false,
             gameover = false
         },
 

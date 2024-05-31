@@ -13,11 +13,13 @@ Playerdmg = 0
 Enemydmg = 0
 --Locals
 local song = love.audio.newSource("assets/audio/background_music.mp3", "stream")
-	song:setLooping(true)
-	song:setVolume(0.5)
+song:setLooping(true)
+song:setVolume(0.5)
+
 local backgroundSFX = love.audio.newSource("assets/audio/sea_waves.mp3", "stream")
-	backgroundSFX:setLooping(true)
-	backgroundSFX:setVolume(0.1)
+backgroundSFX:setLooping(true)
+backgroundSFX:setVolume(0.1)
+
 local font = love.graphics.newFont("assets/TradeWinds-Regular.ttf", 25)
 local background = love.graphics.newImage("assets/background.jpg")
 local menu_background = love.graphics.newImage("assets/menu_background.jpg")
@@ -138,11 +140,12 @@ function love.draw()
 		
 
 		-- Debugging	
-		--love.graphics.print("Player Coordinates: (" .. math.floor(player.x) .. ", " .. math.floor(player.y) .. ")", 10, 10) 
+		love.graphics.print("Player Coordinates: (" .. math.floor(player.x) .. ", " .. math.floor(player.y) .. ")", 10, 10) 
 		--love.graphics.print("Timer:" .. timer, 25, 25)
 		--love.graphics.print("Player Timer:" .. player_timer, 25, 40)
 		--love.graphics.print("Enemy Timer:" .. enemy_timer, 25, 55)
 	elseif game.state.menu then
+		backgroundSFX:pause()
 		menu()
 	end
 
@@ -168,6 +171,9 @@ function love.keypressed(key)
 		if key == "space" then
 			game:changeGameState("running")
 			backgroundSFX:play()
+		end
+		if key == "escape" then
+			love.event.quit()
 		end
 	end
 	if game.state.gameover then

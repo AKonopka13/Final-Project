@@ -18,7 +18,7 @@ end
 
 function Bullet:update(dt)
     -- Moves bullet up or down depending on the original Y position, need to adjust tho   
-    if self.originalY > 300 then
+    if self.originalY > 400 then
         self.y = self.y - self.speed * dt
     else
         self.y = self.y + self.speed * dt

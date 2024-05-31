@@ -13,7 +13,7 @@ local items_list = {
 function Items:new()
     self.image = items_list[love.math.random(1, #items_list)]
     self.x = love.graphics.getWidth()
-    self.y = love.math.random(0, love.graphics.getHeight())
+    self.y = love.math.random(0, 450)
     self.speed = 100
     self.width = self.image:getWidth()
     self.height = self.image:getHeight()
